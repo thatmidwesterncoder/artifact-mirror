@@ -2266,6 +2266,7 @@ Artifacts:
   - v0.3.1
   - v0.3.2
   - v0.4.1
+  - v0.4.3
 - SourceArtifact: quay.io/cilium/cilium
   Tags:
   - v1.10.4
@@ -2321,6 +2322,7 @@ Artifacts:
   - v1.19.1
   - v1.19.2
   - v1.19.3
+  - v1.19.4
   - v1.9.12
   - v1.9.4
   - v1.9.6
@@ -2363,6 +2365,7 @@ Artifacts:
   - v1.35.9-1770979049-232ed4a26881e4ab4f766f251f258ed424fff663
   - v1.35.9-1773656288-7b052e66eb2cfc5ac130ce0a5be66202a10d83be
   - v1.36.6-1776000132-2437d2edeaf4d9b56ef279bd0d71127440c067aa
+  - v1.36.6-1778235340-b87d1e32f522b33bd51701c6476d199326f01496
 - SourceArtifact: quay.io/cilium/cilium-etcd-operator
   Tags:
   - v2.0.7
@@ -2411,6 +2414,7 @@ Artifacts:
   - v1.19.1
   - v1.19.2
   - v1.19.3
+  - v1.19.4
 - SourceArtifact: quay.io/cilium/hubble-relay
   Tags:
   - v1.12.4
@@ -2456,6 +2460,7 @@ Artifacts:
   - v1.19.1
   - v1.19.2
   - v1.19.3
+  - v1.19.4
 - SourceArtifact: quay.io/cilium/hubble-ui
   Tags:
   - v0.10.0
@@ -2467,6 +2472,7 @@ Artifacts:
   - v0.13.1
   - v0.13.2
   - v0.13.3
+  - v0.13.5
   - v0.9.2
 - SourceArtifact: quay.io/cilium/hubble-ui-backend
   Tags:
@@ -2479,6 +2485,7 @@ Artifacts:
   - v0.13.1
   - v0.13.2
   - v0.13.3
+  - v0.13.5
   - v0.9.2
 - SourceArtifact: quay.io/cilium/kvstoremesh
   Tags:
@@ -2543,6 +2550,7 @@ Artifacts:
   - v1.19.1
   - v1.19.2
   - v1.19.3
+  - v1.19.4
   - v1.9.12
   - v1.9.4
   - v1.9.6
@@ -2602,6 +2610,7 @@ Artifacts:
   - v1.19.1
   - v1.19.2
   - v1.19.3
+  - v1.19.4
   - v1.9.12
   - v1.9.4
   - v1.9.6
@@ -2661,6 +2670,7 @@ Artifacts:
   - v1.19.1
   - v1.19.2
   - v1.19.3
+  - v1.19.4
   - v1.9.12
   - v1.9.4
   - v1.9.6
