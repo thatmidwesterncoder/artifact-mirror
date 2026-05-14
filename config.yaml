@@ -2252,6 +2252,7 @@ Artifacts:
   - v0.3.1
   - v0.3.2
   - v0.4.1
+  - v0.4.3
 - SourceArtifact: quay.io/cilium/cilium
   Tags:
   - v1.10.4
