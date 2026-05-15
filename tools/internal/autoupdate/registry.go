@@ -7,40 +7,12 @@ import (
 	"math"
 	"net/http"
 	"regexp"
-	"slices"
-	"sort"
 	"strings"
 	"time"
 
-	"github.com/Masterminds/semver/v3"
-	"github.com/maruel/natural"
 	"github.com/rancher/artifact-mirror/internal/config"
+	"github.com/rancher/artifact-mirror/internal/sortstrategy"
 )
-
-func sortNatural(t []string) ([]string, error) {
-	st := make([]string, len(t))
-	copy(st, t)
-	slices.SortFunc(st, natural.Compare)
-	return st, nil
-}
-
-func sortSemver(t []string) ([]string, error) {
-	vs := make([]*semver.Version, len(t))
-	for i, r := range t {
-		v, err := semver.NewVersion(r)
-		if err != nil {
-			return nil, fmt.Errorf("error parsing version: %s", err)
-		}
-		vs[i] = v
-	}
-	sort.Sort(semver.Collection(vs))
-
-	st := make([]string, len(t))
-	for _, t := range vs {
-		st = append(st, t.String())
-	}
-	return st, nil
-}
 
 type Registry struct {
 	Artifacts     []AutoupdateArtifactRef
@@ -88,11 +60,12 @@ func (r *Registry) GetUpdateArtifacts() ([]*config.Artifact, error) {
 		var sortedTags []string
 		var sortingErr error
 
-		// For appco, we have to use natural sorting https://go.dev/play/p/_TBbV81DdhE
+		// TODO: Give more details
+		// For appco, we must use natural sorting
 		if r.RegistryName == "dp.apps.rancher.io" {
-			sortedTags, sortingErr = sortNatural(filteredTags)
+			sortedTags, sortingErr = sortstrategy.Natural(filteredTags)
 		} else {
-			sortedTags, sortingErr = sortSemver(filteredTags)
+			sortedTags, sortingErr = sortstrategy.Semver(filteredTags)
 		}
 		if sortingErr != nil {
 			return nil, err
