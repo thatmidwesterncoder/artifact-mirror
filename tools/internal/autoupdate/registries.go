@@ -9,7 +9,46 @@ import (
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 )
+
+type AppCoRegistry struct {
+	Namespace  string
+	Repository string
+}
+
+func (a AppCoRegistry) getArtifactTags() ([]string, error) {
+	token := os.Getenv("APPCO_TOKEN")
+	url := fmt.Sprintf("https://dp.apps.rancher.io/v2/%s/%s/tags/list", a.Namespace, a.Repository)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Authorization", "Basic "+token)
+	resp, err := doRequestWithRetries(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response body: %w", err)
+	}
+	var data GenericTagsResponse
+	if err := json.Unmarshal(body, &data); err != nil {
+		return nil, err
+	}
+
+	var tags []string
+	for _, v := range data.Tags {
+		if !strings.Contains(v, "sha256") {
+			tags = append(tags, v)
+		}
+	}
+
+	return tags, nil
+}
 
 type DockerHub struct {
 	Namespace  string

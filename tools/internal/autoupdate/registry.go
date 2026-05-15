@@ -7,11 +7,13 @@ import (
 	"math"
 	"net/http"
 	"regexp"
+	"slices"
 	"sort"
 	"strings"
 	"time"
 
 	"github.com/Masterminds/semver/v3"
+	"github.com/maruel/natural"
 	"github.com/rancher/artifact-mirror/internal/config"
 )
 
@@ -19,6 +21,7 @@ type Registry struct {
 	Artifacts     []AutoupdateArtifactRef
 	Latest        bool   `json:",omitempty"`
 	VersionFilter string `json:",omitempty"`
+	RegistryName  string `json:",omitempty"`
 }
 
 var httpClient = &http.Client{Timeout: 10 * time.Second}
@@ -57,16 +60,28 @@ func (r *Registry) GetUpdateArtifacts() ([]*config.Artifact, error) {
 	}
 
 	if r.Latest {
-		vs := make([]*semver.Version, len(filteredTags))
-		for i, r := range filteredTags {
-			v, err := semver.NewVersion(r)
-			if err != nil {
-				return nil, fmt.Errorf("error parsing version: %s", err)
+		// For appco, we have to use natural sorting
+		// https://go.dev/play/p/_TBbV81DdhE
+		if r.RegistryName == "dp.apps.rancher.io" {
+			slices.SortFunc(filteredTags, natural.Compare)
+
+			for _, t := range filteredTags {
+				fmt.Println(t)
 			}
-			vs[i] = v
+
+			filteredTags = []string{filteredTags[len(filteredTags)-1]}
+		} else {
+			vs := make([]*semver.Version, len(filteredTags))
+			for i, r := range filteredTags {
+				v, err := semver.NewVersion(r)
+				if err != nil {
+					return nil, fmt.Errorf("error parsing version: %s", err)
+				}
+				vs[i] = v
+			}
+			sort.Sort(semver.Collection(vs))
+			filteredTags = []string{vs[len(vs)-1].String()}
 		}
-		sort.Sort(semver.Collection(vs))
-		filteredTags = []string{vs[len(vs)-1].String()} // Use the latest version
 	}
 
 	artifacts := make([]*config.Artifact, 0, len(r.Artifacts))
@@ -125,6 +140,9 @@ func (r *Registry) getRegistryInformationFromArtifact() (ArtifactRegistry, error
 		namespace = splittedArtifact[1]
 		repository = strings.Join(splittedArtifact[2:], "/")
 	}
+
+	r.RegistryName = registry
+
 	switch registry {
 	case "dockerhub":
 		return &DockerHub{
@@ -153,6 +171,11 @@ func (r *Registry) getRegistryInformationFromArtifact() (ArtifactRegistry, error
 		}, nil
 	case "gcr.io":
 		return &GoogleRegistry{
+			Namespace:  namespace,
+			Repository: repository,
+		}, nil
+	case "dp.apps.rancher.io":
+		return &AppCoRegistry{
 			Namespace:  namespace,
 			Repository: repository,
 		}, nil
