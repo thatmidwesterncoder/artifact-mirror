@@ -17,17 +17,18 @@ func Natural(t []string) ([]string, error) {
 }
 
 func Semver(t []string) ([]string, error) {
-	vs := make([]*semver.Version, len(t))
-	for i, r := range t {
+	vs := make([]*semver.Version, 0, len(t))
+	for _, r := range t {
 		v, err := semver.NewVersion(r)
 		if err != nil {
 			return nil, fmt.Errorf("error parsing version: %s", err)
 		}
-		vs[i] = v
+		vs = append(vs, v)
+
 	}
 	sort.Sort(semver.Collection(vs))
 
-	st := make([]string, len(t))
+	st := make([]string, 0, len(t))
 	for _, t := range vs {
 		st = append(st, t.String())
 	}
