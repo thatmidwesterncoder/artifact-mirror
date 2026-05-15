@@ -17,6 +17,31 @@ import (
 	"github.com/rancher/artifact-mirror/internal/config"
 )
 
+func sortNatural(t []string) ([]string, error) {
+	st := make([]string, len(t))
+	copy(st, t)
+	slices.SortFunc(st, natural.Compare)
+	return st, nil
+}
+
+func sortSemver(t []string) ([]string, error) {
+	vs := make([]*semver.Version, len(t))
+	for i, r := range t {
+		v, err := semver.NewVersion(r)
+		if err != nil {
+			return nil, fmt.Errorf("error parsing version: %s", err)
+		}
+		vs[i] = v
+	}
+	sort.Sort(semver.Collection(vs))
+
+	st := make([]string, len(t))
+	for _, t := range vs {
+		st = append(st, t.String())
+	}
+	return st, nil
+}
+
 type Registry struct {
 	Artifacts     []AutoupdateArtifactRef
 	Latest        bool   `json:",omitempty"`
@@ -60,28 +85,21 @@ func (r *Registry) GetUpdateArtifacts() ([]*config.Artifact, error) {
 	}
 
 	if r.Latest {
-		// For appco, we have to use natural sorting
-		// https://go.dev/play/p/_TBbV81DdhE
+		var sortedTags []string
+		var sortingErr error
+
+		// For appco, we have to use natural sorting https://go.dev/play/p/_TBbV81DdhE
 		if r.RegistryName == "dp.apps.rancher.io" {
-			slices.SortFunc(filteredTags, natural.Compare)
-
-			for _, t := range filteredTags {
-				fmt.Println(t)
-			}
-
-			filteredTags = []string{filteredTags[len(filteredTags)-1]}
+			sortedTags, sortingErr = sortNatural(filteredTags)
 		} else {
-			vs := make([]*semver.Version, len(filteredTags))
-			for i, r := range filteredTags {
-				v, err := semver.NewVersion(r)
-				if err != nil {
-					return nil, fmt.Errorf("error parsing version: %s", err)
-				}
-				vs[i] = v
-			}
-			sort.Sort(semver.Collection(vs))
-			filteredTags = []string{vs[len(vs)-1].String()}
+			sortedTags, sortingErr = sortSemver(filteredTags)
 		}
+		if sortingErr != nil {
+			return nil, err
+		}
+
+		lastTag := []string{sortedTags[len(sortedTags)-1]}
+		filteredTags = lastTag
 	}
 
 	artifacts := make([]*config.Artifact, 0, len(r.Artifacts))
