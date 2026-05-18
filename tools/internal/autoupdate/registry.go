@@ -73,7 +73,7 @@ func (r *Registry) GetUpdateArtifacts() ([]*config.Artifact, error) {
 			sortedTags, sortingErr = sortstrategy.Semver(filteredTags)
 		}
 		if sortingErr != nil {
-			return nil, err
+			return nil, fmt.Errorf("failed to sort artifact tags: %w", sortingErr)
 		}
 
 		lastTag := []string{sortedTags[len(sortedTags)-1]}

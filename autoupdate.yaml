@@ -54,14 +54,14 @@
     Latest: true
   Reviewers:
   - rancher/k3s
-- Name: appco-kubernetes-cluster-autoscaler
+- Name: appco-kubernetes-cluster-autoscaler-charts
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/charts/kubernetes-cluster-autoscaler
     Latest: true
   Reviewers:
   - rancher/k3s
-- Name: appco-kubernetes-cluster-autoscaler
+- Name: appco-kubernetes-cluster-autoscaler-containers
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/kubernetes-cluster-autoscaler

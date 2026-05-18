@@ -55,7 +55,9 @@ func TestNatural(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, gotErr := sortstrategy.Natural(tt.t)
 			if tt.wantErr {
-				assert.Error(t, gotErr)
+				assert.Error(t, gotErr, "error should not be nil")
+			} else {
+				assert.NoError(t, gotErr, "error should be nil")
 			}
 			assert.Equal(t, tt.want, got, "The two slices should be the same")
 		})
@@ -103,7 +105,9 @@ func TestSemver(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got, gotErr := sortstrategy.Semver(tt.t)
 			if tt.wantErr {
-				assert.Error(t, gotErr)
+				assert.Error(t, gotErr, "error should not be nil")
+			} else {
+				assert.NoError(t, gotErr, "error should be nil")
 			}
 			assert.Equal(t, tt.want, got, "The two slices should be the same")
 		})
