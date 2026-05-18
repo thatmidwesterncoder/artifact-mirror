@@ -48,5 +48,3 @@ jobs:
       run: bin/artifact-mirror-tools autoupdate
       env:
         GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        APPCO_USERNAME: ${{ env.APPCO_USERNAME }}
-        APPCO_PASSWORD: ${{ env.APPCO_PASSWORD }}
