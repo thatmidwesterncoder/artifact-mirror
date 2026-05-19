@@ -716,6 +716,9 @@ sync:
 - source: dp.apps.rancher.io/containers/grafana:13.0.1-3.2
   target: docker.io/rancher/appco-grafana:13.0.1-3.2
   type: image
+- source: dp.apps.rancher.io/containers/grafana:13.0.1-3.3
+  target: docker.io/rancher/appco-grafana:13.0.1-3.3
+  type: image
 - source: dp.apps.rancher.io/containers/grafana:12.1.1-2.2
   target: registry.suse.com/rancher/appco-grafana:12.1.1-2.2
   type: image
@@ -728,6 +731,9 @@ sync:
 - source: dp.apps.rancher.io/containers/grafana:13.0.1-3.2
   target: registry.suse.com/rancher/appco-grafana:13.0.1-3.2
   type: image
+- source: dp.apps.rancher.io/containers/grafana:13.0.1-3.3
+  target: registry.suse.com/rancher/appco-grafana:13.0.1-3.3
+  type: image
 - source: dp.apps.rancher.io/containers/grafana:12.1.1-2.2
   target: stgregistry.suse.com/rancher/appco-grafana:12.1.1-2.2
   type: image
@@ -739,6 +745,9 @@ sync:
   type: image
 - source: dp.apps.rancher.io/containers/grafana:13.0.1-3.2
   target: stgregistry.suse.com/rancher/appco-grafana:13.0.1-3.2
+  type: image
+- source: dp.apps.rancher.io/containers/grafana:13.0.1-3.3
+  target: stgregistry.suse.com/rancher/appco-grafana:13.0.1-3.3
   type: image
 - source: dp.apps.rancher.io/containers/k3k:1.0.0-1.1
   target: registry.suse.com/rancher/appco-k3k:1.0.0-1.1
