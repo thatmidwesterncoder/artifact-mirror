@@ -124,6 +124,7 @@ Artifacts:
   Tags:
   - 8.14.1-6.1
   - 8.14.1-7.1
+  - 8.14.1-7.3
 - SourceArtifact: dp.apps.rancher.io/containers/grafana
   Tags:
   - 12.1.1-2.2
