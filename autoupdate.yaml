@@ -4,98 +4,70 @@
     - SourceArtifact: dp.apps.rancher.io/containers/alertmanager
     Latest: true
   Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-curl
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/curl
     Latest: true
   Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-grafana
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/grafana
     Latest: true
   Reviewers:
-  - rancher/k3s
-- Name: appco-k3k
-  Registry:
-    Artifacts:
-    - SourceArtifact: dp.apps.rancher.io/containers/k3k
-    Latest: true
-  Reviewers:
-  - rancher/k3s
-- Name: appco-k3k-kubelet
-  Registry:
-    Artifacts:
-    - SourceArtifact: dp.apps.rancher.io/containers/k3k-kubelet
-    Latest: true
-  Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-k8s-sidecar
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/k8s-sidecar
     Latest: true
   Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-kube-rbac-proxy
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/kube-rbac-proxy
     Latest: true
   Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-kube-state-metrics
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/kube-state-metrics
     Latest: true
   Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-kubernetes-cluster-autoscaler-charts
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/charts/kubernetes-cluster-autoscaler
     Latest: true
   Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-kubernetes-cluster-autoscaler-containers
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/kubernetes-cluster-autoscaler
     Latest: true
   Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-node-exporter
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/node-exporter
     Latest: true
   Reviewers:
-  - rancher/k3s
-- Name: appco-redis
-  Registry:
-    Artifacts:
-    - SourceArtifact: dp.apps.rancher.io/containers/redis
-    Latest: true
-  Reviewers:
-  - rancher/k3s
-- Name: appco-suse-virtual-cluster-engine
-  Registry:
-    Artifacts:
-    - SourceArtifact: dp.apps.rancher.io/charts/suse-virtual-cluster-engine
-    Latest: true
-  Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - Name: appco-thanos
   Registry:
     Artifacts:
     - SourceArtifact: dp.apps.rancher.io/containers/thanos
     Latest: true
   Reviewers:
-  - rancher/k3s
+  - rancher/orbs
 - GithubRelease:
     Artifacts:
     - SourceArtifact: quay.io/calico/apiserver
