@@ -698,17 +698,26 @@ sync:
 - source: dp.apps.rancher.io/containers/curl:8.14.1-7.1
   target: docker.io/rancher/appco-curl:8.14.1-7.1
   type: image
+- source: dp.apps.rancher.io/containers/curl:8.14.1-7.3
+  target: docker.io/rancher/appco-curl:8.14.1-7.3
+  type: image
 - source: dp.apps.rancher.io/containers/curl:8.14.1-6.1
   target: registry.suse.com/rancher/appco-curl:8.14.1-6.1
   type: image
 - source: dp.apps.rancher.io/containers/curl:8.14.1-7.1
   target: registry.suse.com/rancher/appco-curl:8.14.1-7.1
   type: image
+- source: dp.apps.rancher.io/containers/curl:8.14.1-7.3
+  target: registry.suse.com/rancher/appco-curl:8.14.1-7.3
+  type: image
 - source: dp.apps.rancher.io/containers/curl:8.14.1-6.1
   target: stgregistry.suse.com/rancher/appco-curl:8.14.1-6.1
   type: image
 - source: dp.apps.rancher.io/containers/curl:8.14.1-7.1
   target: stgregistry.suse.com/rancher/appco-curl:8.14.1-7.1
+  type: image
+- source: dp.apps.rancher.io/containers/curl:8.14.1-7.3
+  target: stgregistry.suse.com/rancher/appco-curl:8.14.1-7.3
   type: image
 - source: dp.apps.rancher.io/containers/grafana:12.1.1-2.2
   target: docker.io/rancher/appco-grafana:12.1.1-2.2
