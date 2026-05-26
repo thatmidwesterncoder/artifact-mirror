@@ -112,6 +112,8 @@ Artifacts:
   - 1.0.0
   - 1.0.1
   - 1.0.2
+  - 1.0.3
+  - 1.1.0
   TargetRepositories:
   - registry.suse.com/rancher/charts
   - stgregistry.suse.com/rancher/charts
@@ -138,6 +140,8 @@ Artifacts:
   - 1.0.0-1.1
   - 1.0.1-1.9
   - 1.0.2-2.3
+  - 1.0.3-7.1
+  - 1.1.0-1.1
   TargetRepositories:
   - registry.suse.com/rancher
   - stgregistry.suse.com/rancher
@@ -146,6 +150,8 @@ Artifacts:
   - 1.0.0-1.1
   - 1.0.1-1.9
   - 1.0.2-2.3
+  - 1.0.3-7.1
+  - 1.1.0-1.1
   TargetRepositories:
   - registry.suse.com/rancher
   - stgregistry.suse.com/rancher
