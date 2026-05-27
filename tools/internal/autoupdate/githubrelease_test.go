@@ -1,10 +1,13 @@
 package autoupdate
 
 import (
+	"net/http"
 	"regexp"
 	"testing"
 
 	"github.com/Masterminds/semver/v3"
+	"github.com/google/go-github/v80/github"
+	"github.com/migueleliasweb/go-github-mock/src/mock"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -228,5 +231,142 @@ func TestGithubRelease(t *testing.T) {
 				}
 			})
 		}
+	})
+
+	t.Run("getVersionFromLatestRelease", func(t *testing.T) {
+		t.Run("should return the tag name for the latest GitHub release", func(t *testing.T) {
+			tagname := "v1.0.0"
+			mockedHTTPClient := mock.NewMockedHTTPClient(
+				mock.WithRequestMatch(
+					mock.GetReposReleasesLatestByOwnerByRepo,
+					github.RepositoryRelease{
+						TagName:    github.Ptr(tagname),
+						Draft:      github.Ptr(false),
+						Prerelease: github.Ptr(false),
+					},
+				),
+			)
+
+			client := github.NewClient(mockedHTTPClient)
+			gr := &GithubRelease{Owner: "kubernetes-sigs", Repository: "metrics-server"}
+
+			latestTag, err := gr.getVersionFromLatestRelease(client)
+			assert.NoError(t, err)
+			assert.Equal(t, tagname, latestTag, "versions should be equal")
+		})
+
+		t.Run("should return error if failed to fetch latest GithubRelease", func(t *testing.T) {
+			mockedHTTPClient := mock.NewMockedHTTPClient(
+				mock.WithRequestMatchHandler(
+					mock.GetReposReleasesLatestByOwnerByRepo,
+					http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						mock.WriteError(
+							w,
+							http.StatusInternalServerError,
+							"no server is currently available to service your request.",
+						)
+					}),
+				),
+			)
+
+			client := github.NewClient(mockedHTTPClient)
+			gr := &GithubRelease{Owner: "kubernetes-sigs", Repository: "metrics-server"}
+
+			latestTag, err := gr.getVersionFromLatestRelease(client)
+			assert.Equal(t, "", latestTag, "should be an empty string")
+			assert.ErrorContains(t, err, "failed to get latest release: ")
+		})
+	})
+
+	t.Run("getVersionsFromAllReleases", func(t *testing.T) {
+		t.Run("should return tag names for all GitHub releases", func(t *testing.T) {
+			mockedResponse := []*github.RepositoryRelease{
+				{
+					TagName: github.Ptr("v0.1.0-rc.1"),
+				},
+				{
+					TagName: github.Ptr("v0.1.1-rc.2"),
+				},
+				{
+					TagName: github.Ptr("v1.0.0-beta"),
+				},
+				{
+					TagName: github.Ptr("v1.0.0"),
+				},
+			}
+
+			mockedHTTPClient := mock.NewMockedHTTPClient(
+				mock.WithRequestMatch(
+					mock.GetReposReleasesByOwnerByRepo,
+					mockedResponse,
+				),
+			)
+
+			client := github.NewClient(mockedHTTPClient)
+			gr := &GithubRelease{Owner: "kubernetes-sigs", Repository: "metrics-server"}
+
+			ghTags, err := gr.getVersionsFromAllReleases(client)
+			assert.NoError(t, err)
+			assert.Equal(t, []string{"v0.1.0-rc.1", "v0.1.1-rc.2", "v1.0.0-beta", "v1.0.0"}, ghTags, "versions should be equal")
+		})
+
+		t.Run("should not return draft or pre-release GithubReleases", func(t *testing.T) {
+			mockedResponse := []*github.RepositoryRelease{
+				{
+					TagName:    github.Ptr("v0.1.0-rc.1"),
+					Draft:      github.Ptr(true),
+					Prerelease: github.Ptr(false),
+				},
+				{
+					TagName:    github.Ptr("v0.1.1-rc.2"),
+					Draft:      github.Ptr(true),
+					Prerelease: github.Ptr(false),
+				},
+				{
+					TagName:    github.Ptr("v1.0.0-beta"),
+					Draft:      github.Ptr(false),
+					Prerelease: github.Ptr(true),
+				},
+				{
+					TagName: github.Ptr("v1.0.0"),
+				},
+			}
+
+			mockedHTTPClient := mock.NewMockedHTTPClient(
+				mock.WithRequestMatch(
+					mock.GetReposReleasesByOwnerByRepo,
+					mockedResponse,
+				),
+			)
+
+			client := github.NewClient(mockedHTTPClient)
+			gr := &GithubRelease{Owner: "kubernetes-sigs", Repository: "metrics-server"}
+
+			ghTags, err := gr.getVersionsFromAllReleases(client)
+			assert.NoError(t, err)
+			assert.Equal(t, []string{"v1.0.0"}, ghTags, "versions should be equal")
+		})
+
+		t.Run("should return error if failed to fetch GithubReleases", func(t *testing.T) {
+			mockedHTTPClient := mock.NewMockedHTTPClient(
+				mock.WithRequestMatchHandler(
+					mock.GetReposReleasesByOwnerByRepo,
+					http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+						mock.WriteError(
+							w,
+							http.StatusInternalServerError,
+							"no server is currently available to service your request.",
+						)
+					}),
+				),
+			)
+
+			client := github.NewClient(mockedHTTPClient)
+			gr := &GithubRelease{Owner: "kubernetes-sigs", Repository: "metrics-server"}
+
+			ghTags, err := gr.getVersionsFromAllReleases(client)
+			assert.Nil(t, ghTags, "should be nil on error")
+			assert.ErrorContains(t, err, "failed to get releases: ")
+		})
 	})
 }
